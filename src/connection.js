@@ -17,8 +17,6 @@ Api.OnApiInitialized(() => {
           (c) => c.player.team === (socket.handshake.query.system || "frontend")
         );
 
-      console.log(clients, socket.handshake);
-
       for (var i = 0; i < clients.length; i++) {
         // TODO: send an array instead of calling multiple emits
         socket.emit("BEND_CLIENT_JOIN", clients[i].createFullPacket());
@@ -52,7 +50,6 @@ Api.OnApiInitialized(() => {
 
           // add identifier to the packet, so front end clients can identify the packet
           parsedJson.name = socket.clientData.player.name;
-          console.log(parsedJson, "to", socket.handshake.auth.token);
 
           // volatile for updating, no need to resend old packets
           Api.GetSocket()

@@ -15,8 +15,6 @@ class Client
     {
         this.previousPacket = packet;
 
-        console.log(packet);
-
         if(packet.name != null)
             this.player.name = packet.name;
         
