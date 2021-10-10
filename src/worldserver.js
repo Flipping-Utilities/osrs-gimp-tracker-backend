@@ -59,6 +59,12 @@ class WorldServer {
     Api.GetSocket()
       .to(socket.request._query.system)
       .emit("BEND_CLIENT_DISCONNECT", { name: client.player.name });
+
+    if (process.env.MASTER_VIEW_ID) {
+      Api.GetSocket()
+        .to(process.env.MASTER_VIEW_ID)
+        .emit("BEND_CLIENT_DISCONNECT", { name: client.player.name });
+    }
     console.log(`Player '${client.player.name}' disconnected`);
     client.socket.disconnect();
     this.removeClient(client);

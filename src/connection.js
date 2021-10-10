@@ -21,6 +21,14 @@ Api.OnApiInitialized(() => {
         // TODO: send an array instead of calling multiple emits
         socket.emit("BEND_CLIENT_JOIN", clients[i].createFullPacket());
       }
+      if (
+        process.env.MASTER_VIEW_ID &&
+        socket.handshake.query.system === process.env.MASTER_VIEW_ID
+      ) {
+        worldManager.getClients().forEach((c) => {
+          socket.emit("BEND_CLIENT_JOIN", c.createFullPacket());
+        });
+      }
     } else {
       console.log("backend connection!");
       socket.emit("authorize", "success");
@@ -55,6 +63,11 @@ Api.OnApiInitialized(() => {
           Api.GetSocket()
             .to(socket.handshake.auth.token || "frontend")
             .volatile.emit("BEND_CLIENT_UPDATE", parsedJson);
+          if (process.env.MASTER_VIEW_ID) {
+            Api.GetSocket()
+              .to(process.env.MASTER_VIEW_ID)
+              .volatile.emit("BEND_CLIENT_UPDATE", parsedJson);
+          }
         }
       });
 
