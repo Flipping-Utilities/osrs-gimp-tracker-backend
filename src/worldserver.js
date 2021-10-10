@@ -27,7 +27,7 @@ class WorldServer {
   }
 
   connectClient(socket, packet) {
-    var player = new Player();
+    var player = new Player(socket.handshake.auth.token);
     var client = new Client(socket, player, this);
 
     client.parsePacket(packet);
@@ -44,7 +44,7 @@ class WorldServer {
 
     var fullPacket = client.createFullPacket();
     Api.GetSocket()
-      .to(socket.handshake.auth.token)
+      .to(socket.handshake.auth.token || "frontend")
       .emit("BEND_CLIENT_JOIN", fullPacket);
 
     console.log(`Player '${player.name}' connected`);

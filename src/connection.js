@@ -4,7 +4,6 @@ const { WorldManager } = require("./worldmanager");
 var worldManager = new WorldManager();
 
 Api.OnApiInitialized(() => {
-
   Api.GetSocket().on("connection", (socket, data) => {
     var system = socket.request._query.system;
     // send existing clients to new frontend connections
@@ -12,7 +11,14 @@ Api.OnApiInitialized(() => {
       socket.join(system);
       console.log("frontend connection!");
 
-      var clients = worldManager.getClients();
+      var clients = worldManager
+        .getClients()
+        .filter(
+          (c) => c.player.team === (socket.handshake.query.system || "frontend")
+        );
+
+      console.log(clients, socket.handshake);
+
       for (var i = 0; i < clients.length; i++) {
         // TODO: send an array instead of calling multiple emits
         socket.emit("BEND_CLIENT_JOIN", clients[i].createFullPacket());
