@@ -40,25 +40,6 @@ function SetInitialized(value)
     }
 }
 
-function AutorizationMiddleware(socket, next)
-{
-    console.log(socket.handshake.auth);
-
-    if(socket.handshake.auth.token && socket.handshake.auth.token == CONFIG.PASSWORD)
-    {
-        next();
-    }
-    else
-    {
-        socket.disconnect();
-    }
-}
-
-function IsAuthorized(socket)
-{
-    return socket.handshake.auth.token != null && socket.handshake.auth.token == CONFIG.PASSWORD;
-}
-
 module.exports = 
 {
     ERROR_RESPONSE,
@@ -70,7 +51,4 @@ module.exports =
     OnApiInitialized,
     
     GetSocket: () => serverSocket,
-
-    AutorizationMiddleware,
-    IsAuthorized,
 }
